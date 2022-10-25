@@ -7,7 +7,7 @@
     "@awarns/core": "^1.1.0",
     "@awarns/notifications": "^1.0.0",
     "@awarns/persistence": "^1.1.0",
-    "@awarns/phone-sensors": "^1.2.0",
+    "@awarns/phone-sensors": "^1.2.1",
     "@nativescript/core": "~8.3.0",
     "@nativescript/theme": "~3.0.2",
     "rxjs": "^7.5.7"
