@@ -1,0 +1,28 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo">
+    <ActionBar title="AwarNS Phone Orientation" icon="">
+        <ActionItem
+            text="Clear records"
+            tap="{{ onClearTap }}"
+            android.position="popup"
+        />
+    </ActionBar>
+
+    <StackLayout>
+        <Button text="Start monitoring" tap="{{ onTapStart }}" class="-primary" visibility="{{ monitoring ? 'collapsed' : 'visible' }}"/>
+        <Button text="Stop monitoring" tap="{{ onTapStop }}" class="-primary" visibility="{{ monitoring ? 'visible' : 'collapsed' }}"/>
+
+        <Label class="horizontal-separator" />
+
+        <ListView
+            items="{{ orientationChanges }}"
+            class="list-group">
+            <ListView.itemTemplate>
+                <GridLayout rows="*,*" columns="*,*" class="list-group-item">
+                    <Label row="0" col="0" text="{{ orientationType, 'Orientation: ' + orientationType }}"/>
+                    <Label row="1" col="0" text="{{ change, 'Change: ' + change }}"/>
+                    <Label row="0" col="1" rowSpan="2" text="{{ timestamp, 'Time: ' + timestamp }}" textWrap="true"/>
+                </GridLayout>
+            </ListView.itemTemplate>
+        </ListView>
+    </StackLayout>
+</Page>
