@@ -35,7 +35,7 @@ export class OrientationStatusCheckerTask extends Task {
       };
     }
 
-    const orientationChange = orientationType !== previousOrientation.orientationType;
+    const orientationChange = previousOrientation ? orientationType !== previousOrientation.orientationType : true;
     if (previousOrientation && orientationChange) {
       await this.statusStore.insert(new Orientation(previousOrientation.orientationType, Change.END));
     }
