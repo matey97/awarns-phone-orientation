@@ -5,6 +5,26 @@ purpose of the file is to pass control to the app’s first module.
 */
 
 import { Application } from '@nativescript/core'
+import { awarns } from "@awarns/core";
+import { tasks } from "~/core/tasks";
+import { taskGraph } from "~/core/graph";
+import { registerNotificationsPlugin } from "@awarns/notifications";
+import { registerPhoneSensorsPlugin } from "@awarns/phone-sensors";
+
+awarns.init(
+  tasks,
+  taskGraph,
+  [
+    registerNotificationsPlugin('AwarNS Phone Orientation Notifications'),
+    registerPhoneSensorsPlugin({
+      enableVibrationOnStart: false
+    }),
+  ]
+)
+  .then(() => console.log('AwarNS framework successfully loaded'))
+  .catch((err) => {
+    console.error(`Could not load AwarNS framework: ${err.stack ? err.stack : err}`);
+  });
 
 Application.run({ moduleName: 'app-root' })
 
