@@ -19,18 +19,18 @@ When a detected orientation is different from a previous one, the application wa
 To keep track of the detected orientations, [@awarns/persistence](https://github.com/GeoTecINIT/awarns-framework/tree/main/packages/persistence) is used.
 In order to trigger notifications to warn the user, [@awarns/notifications](https://github.com/GeoTecINIT/awarns-framework/tree/main/packages/notifications) is used.
 
-### Domain specific features
-With these AwarNS features, the only thing that had to be implemented was the orientation change detection (i.e., domain specific behaviour).
+### App specific features
+With these AwarNS features, the only thing that had to be implemented was the orientation change detection (i.e., app specific behaviour).
 This resulted in the following steps:
-- Create a domain specific [orientation record](app/core/orientation.ts) extending the AwarNS Record class.
+- Create an app specific [orientation record](app/core/orientation.ts) extending the AwarNS Record class.
 In this way, the record can be used as any other AwarNS Record by other features (e.g., persistence).
-- Create a domain specific [orientation checker task](app/core/orientation-status-checker.ts) extending the AwarNS Task class.
+- Create an app specific [orientation checker task](app/core/orientation-status-checker.ts) extending the AwarNS Task class.
 This task receives accelerometer samples from an *@awarns/phone-sensors* task, processes them to determine the orientation of the smartphone, and emits
-a domain orientation record.
+an app-specific orientation record.
 - Create a utility task to [build the notification body text](app/core/prepare-notification-task.ts) from an orientation record, to be used
 in the triggered notifications.
 
-The result of the domain specific tasks and the AwarNS provided tasks can be seen in the following task graph:
+The result of the app specific tasks and the AwarNS provided tasks can be seen in the following task graph:
 ```typescript
 class AwarNSPhoneOrientationTaskGraph implements TaskGraph {
   async describe(
@@ -38,31 +38,31 @@ class AwarNSPhoneOrientationTaskGraph implements TaskGraph {
     run: RunnableTaskDescriptor
   ): Promise<void> {
     on(
-      'startMonitoring',                             // Domain-specific event
+      'startMonitoring',                             // App-specific event
       run('startDetectingPhoneAccelerometerChanges') // @awarns/phone-sensors
     );
 
     on(
       'accelerometerSamplesAcquired',                // @awarns/phone-sensors
-      run('orientationStatusCheckerTask')            // Domain-specific task
+      run('orientationStatusCheckerTask')            // App-specific task
     );
     on(
-      'orientationChangeDetected',                   // Domain-specific event
+      'orientationChangeDetected',                   // App-specific event
       run('writeRecords')                            // @awarns/persistence
     );
     on(
-      'orientationChangeDetected',                   // Domain-specific event
-      run('prepareNotificationTask')                 // Domain-specific task
+      'orientationChangeDetected',                   // App-specific event
+      run('prepareNotificationTask')                 // App-specific task
     );
     on(
-      'notificationPrepared',                        // Domain-specific event
+      'notificationPrepared',                        // App-specific event
       run('sendNotification', {                      // @awarns/notifications
         title: 'Orientation change'
       })
     );
 
     on(
-      'stopMonitoring',                              // Domain-specific event
+      'stopMonitoring',                              // App-specific event
       run('stopDetectingPhoneAccelerometerChanges')  // @awarns/phone-sensors
     );
   }
